@@ -1,0 +1,53 @@
+# Benchmark suite v1.
+#
+# Versioned as a file, not as code, and never edited in place. Changing a
+# tolerance or an episode count silently invalidates every historical
+# comparison — if a task needs to change, add `manipulation_v2.yaml` so old
+# results stay interpretable.
+#
+# `episodes_per_task` is the lever that decides what this suite can resolve. At
+# 60 episodes per task across 4 tasks (240 paired episodes) the harness can
+# detect roughly a 10-point difference in success rate at 80% power. Anything
+# smaller comes back INCONCLUSIVE rather than being waved through — see
+# `stats.required_episodes`.
+
+name: manipulation_v1
+episodes_per_task: 60
+seed_base: 1000
+
+tasks:
+  - task_id: reach_near
+    # The easy case. If a policy fails here it is broken, not merely weak.
+    goal_distance_min: 0.15
+    goal_distance_max: 0.30
+    position_tolerance: 0.05
+    max_steps: 120
+    requires_grasp: false
+
+  - task_id: reach_far
+    # Needs sustained motion in a consistent direction across many steps —
+    # where compounding error in a behaviour-cloned policy shows up first.
+    goal_distance_min: 0.35
+    goal_distance_max: 0.55
+    position_tolerance: 0.05
+    max_steps: 200
+    requires_grasp: false
+
+  - task_id: reach_precise
+    # Same distance as reach_near, a third of the tolerance. Separates policies
+    # that approach the goal from policies that actually settle on it.
+    goal_distance_min: 0.15
+    goal_distance_max: 0.30
+    position_tolerance: 0.015
+    max_steps: 150
+    requires_grasp: false
+
+  - task_id: grasp_at_target
+    # Reach *and* close the gripper. Gripper timing is what manipulation
+    # policies most often get wrong, and it is invisible in joint-error metrics.
+    goal_distance_min: 0.20
+    goal_distance_max: 0.40
+    position_tolerance: 0.05
+    max_steps: 180
+    requires_grasp: true
+    grasp_threshold: 0.3

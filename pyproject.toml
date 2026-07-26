@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "erl-vla-evals"
+version = "0.1.0"
+description = "Checkpoint registry and statistically honest evaluation harness for robot policies"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "abyyworld" }]
+keywords = ["robotics", "vla", "evaluation", "model-registry", "mlops", "benchmarking"]
+
+dependencies = [
+    "numpy>=1.24",
+    "pydantic>=2.5",
+    "typer>=0.9",
+    "rich>=13.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# Only needed to evaluate checkpoints produced by erl-teleop-pipeline; the
+# registry, benchmark and statistics run without it.
+torch = ["torch>=2.1"]
+track = ["mlflow>=2.9"]
+dev = ["pytest>=7.4", "pytest-cov>=4.1", "ruff>=0.3"]
+
+[project.scripts]
+erl-evals = "erl_vla_evals.cli:app"
+
+[project.urls]
+Repository = "https://github.com/abyyworld/erl-vla-evals"
+Upstream = "https://github.com/abyyworld/erl-teleop-pipeline"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]

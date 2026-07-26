@@ -1,0 +1,22 @@
+# Registry blobs are large binaries; the index.json is the part worth tracking.
+/registry/
+/results/
+/reports/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+*.pt
+.DS_Store
+.idea/
+.vscode/
