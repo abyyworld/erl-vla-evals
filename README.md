@@ -1,4 +1,4 @@
-# erl-vla-evals
+# policy-eval-harness
 
 **Checkpoint registry and a statistically honest evaluation harness for robot policies.**
 
@@ -7,14 +7,14 @@ produced it. Every comparison is paired, interval-estimated, and refuses to
 declare a winner it cannot actually resolve.
 
 ```bash
-git clone https://github.com/abyyworld/erl-vla-evals
-cd erl-vla-evals
+git clone https://github.com/abyyworld/policy-eval-harness
+cd policy-eval-harness
 make install
 make baselines     # confirm the suite discriminates at all
 make demo-gate     # watch the gate reject an injected regression
 ```
 
-Downstream of [`erl-teleop-pipeline`](https://github.com/abyyworld/erl-teleop-pipeline),
+Downstream of [`teleop-data-pipeline`](https://github.com/abyyworld/teleop-data-pipeline),
 which produces the checkpoints and the lineage records this consumes.
 
 ---
@@ -24,7 +24,7 @@ which produces the checkpoints and the lineage records this consumes.
 A behaviour-cloning policy with an offline action error of **0.0078 rad** and
 **97.9% gripper accuracy** achieves **0.0% closed-loop success** on this suite.
 
-| | Offline (`erl-teleop eval`) | Closed-loop (`erl-evals run`) |
+| | Offline (`teleop-pipeline eval`) | Closed-loop (`policy-evals run`) |
 | --- | ---: | ---: |
 | action MAE | 0.00779 rad | — |
 | gripper accuracy | 97.9% | — |
@@ -43,9 +43,9 @@ Full write-up: [`docs/OFFLINE_VS_CLOSED_LOOP.md`](docs/OFFLINE_VS_CLOSED_LOOP.md
 ### 1. A registry that refuses untraceable checkpoints
 
 ```bash
-erl-evals registry add ../erl-teleop-pipeline/artifacts/policy.pt
-erl-evals registry list
-erl-evals registry promote a4f894f8 --stage production
+policy-evals registry add ../teleop-data-pipeline/artifacts/policy.pt
+policy-evals registry list
+policy-evals registry promote a4f894f8 --stage production
 ```
 
 - **Content-addressed.** A checkpoint's identity is the SHA-256 of its bytes.
@@ -99,7 +99,7 @@ this way while building it:
 ### 3. A gate that will not be rushed
 
 ```bash
-erl-evals gate <candidate> --tolerance 0.02
+policy-evals gate <candidate> --tolerance 0.02
 ```
 
 Benchmarks the candidate and the production checkpoint on **identical seeds**,
@@ -157,7 +157,7 @@ class MyVLAPolicy:
         ...  # returns [7 joint deltas, gripper target]
 ```
 
-`CheckpointPolicy` (for `erl-teleop-pipeline` checkpoints) is the worked example.
+`CheckpointPolicy` (for `teleop-data-pipeline` checkpoints) is the worked example.
 It validates the observation mapping by name at load time, so a checkpoint
 expecting a column the environment does not supply fails loudly with the
 column's name — rather than silently receiving the wrong number in that slot and
@@ -182,7 +182,7 @@ talking to.
 
 ```
 conf/benchmarks/manipulation_v1.yaml   the suite, versioned as a file
-src/erl_vla_evals/
+src/policy_evals/
   registry.py     content-addressed checkpoints, provenance, staging
   env.py          kinematic closed-loop environment
   benchmark.py    suite runner; identical seeds for every policy
@@ -201,11 +201,11 @@ make test          # 40 tests
 make baselines     # confirm the suite still discriminates
 make demo-gate     # inject a regression and watch the gate reject it
 
-erl-evals registry add <checkpoint>       # register, with provenance
-erl-evals registry promote <id> --stage production
-erl-evals run <policy|id>                 # benchmark
-erl-evals compare <baseline> <candidate>  # paired comparison + gate
-erl-evals gate <candidate>                # both, against production
+policy-evals registry add <checkpoint>       # register, with provenance
+policy-evals registry promote <id> --stage production
+policy-evals run <policy|id>                 # benchmark
+policy-evals compare <baseline> <candidate>  # paired comparison + gate
+policy-evals gate <candidate>                # both, against production
 ```
 
 ## Status

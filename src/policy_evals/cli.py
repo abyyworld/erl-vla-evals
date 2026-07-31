@@ -34,7 +34,7 @@ ResultsOpt = typer.Option("results", "--results", help="Where run results are st
 
 @app.command()
 def version() -> None:
-    console.print(f"erl-vla-evals {__version__}")
+    console.print(f"policy-eval-harness {__version__}")
 
 
 # -- registry ---------------------------------------------------------------

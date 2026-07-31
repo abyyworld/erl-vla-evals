@@ -26,7 +26,7 @@ import numpy as np
 
 N_JOINTS = 7
 
-# Franka Panda joint limits (rad). Shared with erl-teleop-pipeline so a policy
+# Franka Panda joint limits (rad). Shared with teleop-data-pipeline so a policy
 # trained there sees the same state space here.
 JOINT_LOWER = np.array([-2.8973, -1.7628, -2.8973, -3.0718, -2.8973, -0.0175, -2.8973])
 JOINT_UPPER = np.array([2.8973, 1.7628, 2.8973, -0.0698, 2.8973, 3.7525, 2.8973])
@@ -35,7 +35,7 @@ JOINT_UPPER = np.array([2.8973, 1.7628, 2.8973, -0.0698, 2.8973, 3.7525, 2.8973]
 def forward_kinematics(q: np.ndarray) -> np.ndarray:
     """Smooth, deterministic joint-space -> Cartesian map.
 
-    Deliberately the *same* function `erl-teleop-pipeline` uses to synthesise
+    Deliberately the *same* function `teleop-data-pipeline` uses to synthesise
     end-effector pose. It is not a real Panda FK chain, and pretending otherwise
     would be worse than an honest placeholder — but it is smooth, invertible
     enough to be reachable, and consistent between the two repositories, which
@@ -206,7 +206,7 @@ class Environment:
         return forward_kinematics(self.q)
 
     def observation(self) -> dict[str, np.ndarray]:
-        """Named channels, matching erl-teleop-pipeline's canonical schema.
+        """Named channels, matching teleop-data-pipeline's canonical schema.
 
         Returned as a dict rather than a flat vector so an adapter can select
         exactly the columns its checkpoint was trained on. A flat vector would

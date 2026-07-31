@@ -12,10 +12,10 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from erl_vla_evals.adapters import build_policy
-from erl_vla_evals.benchmark import BenchmarkSpec, run_benchmark, run_episode
-from erl_vla_evals.compare import compare
-from erl_vla_evals.env import Environment, TaskSpec
+from policy_evals.adapters import build_policy
+from policy_evals.benchmark import BenchmarkSpec, run_benchmark, run_episode
+from policy_evals.compare import compare
+from policy_evals.env import Environment, TaskSpec
 
 BENCHMARK = Path(__file__).resolve().parents[1] / "conf" / "benchmarks" / "manipulation_v1.yaml"
 
@@ -143,7 +143,7 @@ def test_seeds_are_stable_across_processes(spec):
     import sys
 
     script = (
-        "from erl_vla_evals.benchmark import BenchmarkSpec;"
+        "from policy_evals.benchmark import BenchmarkSpec;"
         f"s=BenchmarkSpec.load({str(BENCHMARK)!r});"
         "print([s.seeds_for(t)[0] for t in s.tasks])"
     )
@@ -230,7 +230,7 @@ def _synthetic_run(policy: str, outcomes: list[bool], task_id: str = "reach_near
     run: the interesting cases are specific win/loss patterns, and reaching them
     by tuning a noise level would make the test both slow and flaky.
     """
-    from erl_vla_evals.benchmark import BenchmarkResult, EpisodeResult, TaskResult
+    from policy_evals.benchmark import BenchmarkResult, EpisodeResult, TaskResult
 
     episodes = [
         EpisodeResult(
@@ -297,7 +297,7 @@ def test_a_regression_below_tolerance_still_passes():
 
 
 def test_results_round_trip_through_disk(tmp_path, fast_spec):
-    from erl_vla_evals.benchmark import BenchmarkResult
+    from policy_evals.benchmark import BenchmarkResult
 
     original = run_benchmark(fast_spec, build_policy("scripted"))
     path = original.save(tmp_path / "run.json")
@@ -310,7 +310,7 @@ def test_results_round_trip_through_disk(tmp_path, fast_spec):
 
 
 def test_report_renders(fast_spec):
-    from erl_vla_evals import report as report_mod
+    from policy_evals import report as report_mod
 
     baseline = run_benchmark(fast_spec, build_policy("scripted"))
     candidate = run_benchmark(fast_spec, build_policy("scripted+noise:0.12"))

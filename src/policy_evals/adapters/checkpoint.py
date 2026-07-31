@@ -1,4 +1,4 @@
-"""Adapter for checkpoints produced by erl-teleop-pipeline.
+"""Adapter for checkpoints produced by teleop-data-pipeline.
 
 The checkpoint format is self-describing — weights, normalisation statistics and
 the exact observation column order travel with it — so this loads without
@@ -76,7 +76,7 @@ def build_index(obs_columns: list[str]) -> list[tuple[str, int]]:
 
 
 class CheckpointPolicy:
-    """Runs an erl-teleop-pipeline behaviour-cloning checkpoint in the loop."""
+    """Runs an teleop-data-pipeline behaviour-cloning checkpoint in the loop."""
 
     def __init__(self, checkpoint_path: Path, name: str | None = None, device: str = "cpu") -> None:
         torch = _require_torch()

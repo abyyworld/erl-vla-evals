@@ -42,7 +42,7 @@ jobs:
       - run: |
           pip install --upgrade pip
           pip install -e '.[dev]'
-      - run: pytest -q --cov=erl_vla_evals --cov-report=term-missing
+      - run: pytest -q --cov=policy_evals --cov-report=term-missing
 
   suite-sanity:
     # A benchmark whose trivial baselines score well is measuring the
@@ -61,9 +61,9 @@ jobs:
 
       - name: Trivial baselines must fail, the oracle must succeed
         run: |
-          erl-evals run zero     --tag zero
-          erl-evals run random   --tag random
-          erl-evals run scripted --tag scripted
+          policy-evals run zero     --tag zero
+          policy-evals run random   --tag random
+          policy-evals run scripted --tag scripted
           python - <<'PY'
           import json, sys
           def rate(tag):
@@ -88,8 +88,8 @@ jobs:
         # If this stops failing, the gate has stopped working and every future
         # PASS is meaningless.
         run: |
-          erl-evals run scripted+noise:0.12 --tag degraded
-          if erl-evals compare \
+          policy-evals run scripted+noise:0.12 --tag degraded
+          if policy-evals compare \
               results/manipulation_v1__scripted.json \
               results/manipulation_v1__degraded.json \
               --tolerance 0.02 --out results/regression_check.md; then
@@ -131,7 +131,7 @@ jobs:
           pip install -e '.[dev,torch]'
 
       - name: Gate
-        run: erl-evals gate "${{ inputs.candidate }}" --tolerance 0.02
+        run: policy-evals gate "${{ inputs.candidate }}" --tolerance 0.02
 
       - name: Report
         if: always()

@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from erl_vla_evals.stats import (
+from policy_evals.stats import (
     bootstrap_mean_ci,
     mcnemar_exact,
     paired_bootstrap_diff,

@@ -2,7 +2,7 @@
 
 A checkpoint you cannot trace to a data version and a commit is not a result,
 it is a file. This registry makes the trace mandatory rather than optional:
-registration reads the `lineage.json` written by `erl-teleop-pipeline` and
+registration reads the `lineage.json` written by `teleop-data-pipeline` and
 refuses anything that cannot say where it came from.
 
 Design choices worth stating:
@@ -61,7 +61,7 @@ class Checkpoint(BaseModel):
     path: str
 
     # Provenance, carried forward from the training pipeline. `dataset_hash` is
-    # the join key between this registry and erl-teleop-pipeline.
+    # the join key between this registry and teleop-data-pipeline.
     dataset_hash: str | None = None
     git_commit: str | None = None
     git_dirty: bool | None = None

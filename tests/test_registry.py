@@ -4,12 +4,12 @@ import json
 
 import pytest
 
-from erl_vla_evals.registry import Registry, RegistryError
+from policy_evals.registry import Registry, RegistryError
 
 
 @pytest.fixture
 def checkpoint(tmp_path):
-    """A fake checkpoint with the lineage erl-teleop-pipeline would have written."""
+    """A fake checkpoint with the lineage teleop-data-pipeline would have written."""
 
     def _make(name: str = "policy", content: bytes = b"weights-v1", **lineage_overrides):
         directory = tmp_path / name

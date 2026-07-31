@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "erl-vla-evals"
+name = "policy-eval-harness"
 version = "0.1.0"
 description = "Checkpoint registry and statistically honest evaluation harness for robot policies"
 readme = "README.md"
@@ -21,18 +21,18 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# Only needed to evaluate checkpoints produced by erl-teleop-pipeline; the
+# Only needed to evaluate checkpoints produced by teleop-data-pipeline; the
 # registry, benchmark and statistics run without it.
 torch = ["torch>=2.1"]
 track = ["mlflow>=2.9"]
 dev = ["pytest>=7.4", "pytest-cov>=4.1", "ruff>=0.3"]
 
 [project.scripts]
-erl-evals = "erl_vla_evals.cli:app"
+policy-evals = "policy_evals.cli:app"
 
 [project.urls]
-Repository = "https://github.com/abyyworld/erl-vla-evals"
-Upstream = "https://github.com/abyyworld/erl-teleop-pipeline"
+Repository = "https://github.com/abyyworld/policy-eval-harness"
+Upstream = "https://github.com/abyyworld/teleop-data-pipeline"
 
 [tool.setuptools.packages.find]
 where = ["src"]

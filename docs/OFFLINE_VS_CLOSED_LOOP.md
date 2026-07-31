@@ -5,10 +5,10 @@ This is the finding that justifies the existence of this repository.
 ## The two numbers
 
 The behaviour-cloning policy trained by
-[`erl-teleop-pipeline`](https://github.com/abyyworld/erl-teleop-pipeline) was
+[`teleop-data-pipeline`](https://github.com/abyyworld/teleop-data-pipeline) was
 evaluated twice: once offline on held-out demonstrations, once closed-loop here.
 
-**Offline** (`erl-teleop eval`, 55 held-out episodes across 10 held-out sessions):
+**Offline** (`teleop-pipeline eval`, 55 held-out episodes across 10 held-out sessions):
 
 | Metric | Value |
 | --- | ---: |
@@ -20,7 +20,7 @@ evaluated twice: once offline on held-out demonstrations, once closed-loop here.
 An action error under a hundredth of a radian and 98% gripper agreement. Nothing
 in that table says "this policy does not work".
 
-**Closed-loop** (`erl-evals run`, 240 episodes across 4 tasks):
+**Closed-loop** (`policy-evals run`, 240 episodes across 4 tasks):
 
 | Task | Success rate |
 | --- | ---: |
@@ -73,7 +73,7 @@ forms:
   error is measured exactly where the policy is strongest.
 - **Causal confusion.** A policy fed its own previous action can learn to copy
   it and ignore the state entirely. Offline this looks near-perfect; on hardware
-  it drifts. (`erl-teleop-pipeline` feeds `prev_act_*` in, and documents the
+  it drifts. (`teleop-data-pipeline` feeds `prev_act_*` in, and documents the
   trade-off in its own `docs/BASELINES.md`.)
 - **Multimodality.** When demonstrators solved a task two ways, the
   error-minimising prediction is the average of the two — which is often a
@@ -93,20 +93,20 @@ incomplete, which was true and is now visible. Concretely:
 2. **Keep both metrics.** Offline error is a fast regression signal — it catches
    a broken checkpoint or a normalisation mismatch in seconds. It is a smoke
    test, not a result.
-3. **Gate promotions on closed-loop numbers only.** `erl-evals gate` compares
+3. **Gate promotions on closed-loop numbers only.** `policy-evals gate` compares
    against the production checkpoint on identical seeds and refuses to pass a
    regression, or an underpowered comparison that cannot tell.
 
 ## Reproducing
 
 ```bash
-# in erl-teleop-pipeline
+# in teleop-data-pipeline
 dvc repro
 cat reports/eval_val.json
 
-# in erl-vla-evals
-erl-evals registry add ../erl-teleop-pipeline/artifacts/policy.pt --name bc-teleop-v1
-erl-evals run <checkpoint-id>
+# in policy-eval-harness
+policy-evals registry add ../teleop-data-pipeline/artifacts/policy.pt --name bc-teleop-v1
+policy-evals run <checkpoint-id>
 ```
 
 ## The honest caveat

@@ -39,14 +39,14 @@ fmt: ## Auto-format
 baselines: ## Run every reference policy, to confirm the suite discriminates
 	@for p in zero random scripted scripted+noise:0.05 scripted+noise:0.12; do \
 		printf "%-24s " "$$p"; \
-		$(BIN)/erl-evals run "$$p" --benchmark $(BENCH) 2>&1 | grep overall; \
+		$(BIN)/policy-evals run "$$p" --benchmark $(BENCH) 2>&1 | grep overall; \
 	done
 
 .PHONY: demo-gate
 demo-gate: ## Show the gate catching an injected regression
-	$(BIN)/erl-evals run scripted --benchmark $(BENCH) --tag baseline
-	$(BIN)/erl-evals run scripted+noise:0.12 --benchmark $(BENCH) --tag candidate
-	-$(BIN)/erl-evals compare \
+	$(BIN)/policy-evals run scripted --benchmark $(BENCH) --tag baseline
+	$(BIN)/policy-evals run scripted+noise:0.12 --benchmark $(BENCH) --tag candidate
+	-$(BIN)/policy-evals compare \
 		results/manipulation_v1__baseline.json \
 		results/manipulation_v1__candidate.json
 

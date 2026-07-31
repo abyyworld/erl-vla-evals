@@ -1,4 +1,4 @@
-"""erl-vla-evals — checkpoint registry and statistically honest evaluation harness."""
+"""policy-eval-harness — checkpoint registry and statistically honest evaluation harness."""
 
 from __future__ import annotations
 
